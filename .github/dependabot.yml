@@ -22,5 +22,3 @@ updates:
     directory: "/docs"
     schedule:
       interval: "daily"
-    ignore:
-      - dependency-name: "*"
