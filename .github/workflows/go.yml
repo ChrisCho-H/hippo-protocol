@@ -34,11 +34,10 @@ jobs:
           go-version: "1.23"
 
       - name: Test
-        shell: bash
-        run: |
-          go test -coverpkg=./... ./... -v && go test ./... -coverprofile=cover.out ./... && go tool cover -func=cover.out
+        run:
+          go test -coverpkg=./... ./... -v && go test ./... -coverprofile=cover.out && go tool cover -func=cover.out
 
-          coverage=$(go tool cover -func=coverage.out | awk '/total:/ {print $3}' | sed 's/%//' | awk '{print $1}')
+          coverage=$(go tool cover -func=cover.out | awk '/total:/ {print $3}' | sed 's/%//' | awk '{print $1}')
           threshold=80
 
           if [[ -z "$coverage" ]]; then
@@ -49,6 +48,7 @@ jobs:
           if (( $(echo "$coverage" ) < $threshold )); then
           echo "Error:Coverage is below threshold ($coverage% < $threshold%)"
           exit 1
+
           else
           echo "Coverage is $coverage%, which meets the threshold ($threshold%)"
           fi
