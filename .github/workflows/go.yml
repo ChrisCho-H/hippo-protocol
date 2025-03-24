@@ -34,7 +34,7 @@ jobs:
           go-version: "1.23"
 
       - name: Test
-        run:
+        run: |
           go test -coverpkg=./... ./... -v && go test ./... -coverprofile=cover.out && go tool cover -func=cover.out
 
           coverage=$(go tool cover -func=cover.out | awk '/total:/ {print $3}' | sed 's/%//' | awk '{print $1}')
