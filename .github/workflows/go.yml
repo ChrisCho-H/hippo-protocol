@@ -39,12 +39,12 @@ jobs:
           threshold=80
 
           if [[ -z "$coverage" ]]; then
-            echo "Error: Could not extract coverage percentage."
+            echo "Error:Could not extract coverage percentage."
             exit 1
           fi
 
           if (( $(echo "$coverage" ) < $threshold )); then
-            echo "Error: Coverage is below threshold ($coverage% < $threshold%)"
+            echo "Error:Coverage is below threshold ($coverage% < $threshold%)"
             exit 1
           else
             echo "Coverage is $coverage%, which meets the threshold ($threshold%)"
