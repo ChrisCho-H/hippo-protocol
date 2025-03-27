@@ -52,3 +52,23 @@ jobs:
           else
           echo "Coverage is $coverage%, which meets the threshold ($threshold%)"
           fi
+  
+  genesis-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.23"
+
+      - name: Genesis
+        run: |
+          go run hippod/main.go init hippo --chain-id hippo-protocol-testnet-1
+          go run hippod/main.go keys add alice --keyring-backend file
+          go run hippod/main.go genesis add-genesis-account alice 1084734273380000000000000000ahp
+          go run hippod/main.go genesis gentx alice 1000000000000000000ahp --chain-id hippo-protocol-testnet-1
+          go run hippod/main.go genesis collect-gentxs
+          go run hippod/main.go start
+
