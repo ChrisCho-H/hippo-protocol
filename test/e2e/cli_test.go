@@ -95,6 +95,7 @@ func TestUpgrade(t *testing.T) {
 
 	testQuery(t, tests)
 }
+
 /*
 func TestTx(t *testing.T) {
 	tests := []Test{
