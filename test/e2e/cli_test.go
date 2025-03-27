@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"os/exec"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -14,12 +15,19 @@ type Test struct {
 	errorMsg string
 }
 
-const delegator_address = `$(echo -e "password" | go run hippod/main.go keys show alice --keyring-backend file | awk '/address:/ {print $3}')` // Address of the delegator
-const validator_address = `$(echo -e "password" | go run hippod/main.go keys show alice --keyring-backend file | awk '/address:/ {print $3}')` // Address of the validator
-const target_address = "hippo1mj5e9kpths3x5qsxarax9c50dadumyj8rqxq95"                                                                          // any bech32 hippo address that is tx target(used for sending, ...etc)
-const passphrase = "password"                                                                                                                  // used when sending tx
+const target_address = "hippo1mj5e9kpths3x5qsxarax9c50dadumyj8rqxq95" // any bech32 hippo address that is tx target(used for sending, ...etc)
+const passphrase = "password"                                         // used when sending tx
 
 const path = "../../hippod/main.go"
+
+func getAliceAddress() (string, error) {
+	cmd := exec.Command("bash", "-c", `echo -e "password" | go run hippod/main.go keys show alice --keyring-backend file | awk '/address:/ {print $3}'`)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(string(out)), nil
+}
 
 func testQuery(t *testing.T, tests []Test) {
 	for _, test := range tests {
@@ -40,6 +48,7 @@ func TestAuth(t *testing.T) {
 }
 
 func TestBank(t *testing.T) {
+	delegator_address, _ := getAliceAddress()
 	tests := []Test{
 		{command: []string{"query", "bank", "balances", delegator_address}, expect: "balances", errorMsg: "balances should be in the output"},
 		// {command: []string{"query", "bank", "denom-metadata", "ahp"}, expect: "ahp", errorMsg: "metadata should be in the output"}, // Fail, currently metadata do not exists
@@ -50,6 +59,7 @@ func TestBank(t *testing.T) {
 }
 
 func TestDistribution(t *testing.T) {
+	delegator_address, _ := getAliceAddress()
 	tests := []Test{
 		{command: []string{"query", "distribution", "community-pool"}, expect: "ahp", errorMsg: "community pool balance should be in the output"},
 		{command: []string{"query", "distribution", "params"}, expect: "community_tax", errorMsg: "community_tax should be in the distribution params"},
@@ -78,6 +88,7 @@ func TestMint(t *testing.T) {
 }
 
 func TestStaking(t *testing.T) {
+	delegator_address, _ := getAliceAddress()
 	tests := []Test{
 		{command: []string{"query", "staking", "delegations", delegator_address}, expect: "delegator_address", errorMsg: "delegations made by address should be in the output"},
 		{command: []string{"query", "staking", "validators"}, expect: "hippovaloper", errorMsg: "validator address should be in the output"},
@@ -98,6 +109,8 @@ func TestUpgrade(t *testing.T) {
 }
 
 func TestTx(t *testing.T) {
+	delegator_address, _ := getAliceAddress()
+	validator_address, _ := getAliceAddress()
 	tests := []Test{
 		{command: []string{"tx", "bank", "send", delegator_address, target_address, "1000000000000000000ahp", "--fees=1000000000000000000ahp", "-y"}, expect: "txhash", errorMsg: "txhash should be in the output"},
 		{command: []string{"tx", "staking", "delegate", validator_address, "1000000000000000000ahp", "--fees=1000000000000000000ahp", fmt.Sprintf("--from=%s", delegator_address), "-y"}, expect: "txhash", errorMsg: "txhash should be in the output"},
