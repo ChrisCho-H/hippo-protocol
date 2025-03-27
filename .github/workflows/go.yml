@@ -78,6 +78,7 @@ jobs:
             sleep 1
           done
           echo "Node started."
+          go run hippod/main.go keys show alice
 
       - name: Run Command Test # Ensure all the commands pass.
         run: |
