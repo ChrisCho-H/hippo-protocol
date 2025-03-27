@@ -66,4 +66,5 @@ jobs:
       - name: Genesis
         run: |
           go run hippod/main.go init hippo --chain-id hippo-protocol-testnet-1
-          go run hippod/main.go keys add alice --keyring-backend file <<< "password" <<< "password"
+          echo -e "password\npassword" | go run hippod/main.go keys add alice --keyring-backend file
+
