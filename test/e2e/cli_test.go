@@ -14,8 +14,8 @@ type Test struct {
 	errorMsg string
 }
 
-const delegator_address = `$(echo -e "password" | go run hippod/main.go keys show alice --keyring-backend file | awk '/address:/ {print $2}')` // Address of the delegator
-const validator_address = `$(echo -e "password" | go run hippod/main.go keys show alice --keyring-backend file | awk '/address:/ {print $2}')` // Address of the validator
+const delegator_address = `$(echo -e "password" | go run hippod/main.go keys show alice --keyring-backend file | awk '/address:/ {print $3}')` // Address of the delegator
+const validator_address = `$(echo -e "password" | go run hippod/main.go keys show alice --keyring-backend file | awk '/address:/ {print $3}')` // Address of the validator
 const target_address = "hippo1mj5e9kpths3x5qsxarax9c50dadumyj8rqxq95"                                                                          // any bech32 hippo address that is tx target(used for sending, ...etc)
 const passphrase = "password"                                                                                                                  // used when sending tx
 
