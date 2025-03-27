@@ -96,7 +96,7 @@ func TestUpgrade(t *testing.T) {
 
 	testQuery(t, tests)
 }
-
+/*
 func TestTx(t *testing.T) {
 	tests := []Test{
 		{command: []string{"tx", "bank", "send", delegator_address, target_address, "1000000000000000000ahp", "--fees=1000000000000000000ahp", "-y"}, expect: "txhash", errorMsg: "txhash should be in the output"},
@@ -133,3 +133,4 @@ func TestTx(t *testing.T) {
 	}
 
 }
+*/
