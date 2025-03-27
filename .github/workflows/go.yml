@@ -70,7 +70,6 @@ jobs:
           go run hippod/main.go init hippo --chain-id hippo-protocol-testnet-1
           echo -e "password\npassword" | go run hippod/main.go keys add alice --keyring-backend file
           echo -e "password" | go run hippod/main.go genesis add-genesis-account alice 1084734273380000000000000000ahp --keyring-backend file
-          go run hippod/main.go keys show alice --keyring-backend file
           echo -e "password" | go run hippod/main.go genesis gentx alice 1000000000000000000ahp --chain-id hippo-protocol-testnet-1 --keyring-backend file
           go run hippod/main.go genesis collect-gentxs
           go run hippod/main.go start &
@@ -79,6 +78,7 @@ jobs:
             sleep 1
           done
           echo "Node started."
+          echo -e "password" | go run hippod/main.go keys show alice --keyring-backend file
 
       - name: Run Command Test # Ensure all the commands pass.
         run: |
