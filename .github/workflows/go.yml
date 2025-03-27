@@ -38,7 +38,6 @@ jobs:
           go test -coverpkg=$(go list ./... | grep -v "/test/e2e") $(go list ./... | grep -v "/test/e2e") -v
           go test $(go list ./... | grep -v "/test/e2e") -coverprofile=cover.out
           go tool cover -func=cover.out
-
           coverage=$(go tool cover -func=cover.out | awk '/total:/ {print $3}' | sed 's/%//' | awk '{print $1}')
           threshold=80
 
@@ -47,7 +46,7 @@ jobs:
           exit 1
           fi
 
-          if [[ $(echo "$coverage"  < $threshold | bc -l) -eq 0 ]]; then
+          if (( $(echo $(printf "%.0f" "$coverage") ) < $threshold )); then
           echo "Error:Coverage is below threshold ($coverage% < $threshold%)"
           exit 1
 
