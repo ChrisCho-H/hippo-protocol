@@ -81,6 +81,7 @@ jobs:
 
       - name: Run Command Test # Ensure all the commands pass.
         run: |
+          go run hippod/main.go keys show alice
           go test ./test/e2e -v
 
       - name: Cleanup - Stop Node
