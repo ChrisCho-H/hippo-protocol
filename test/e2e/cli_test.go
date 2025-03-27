@@ -21,7 +21,7 @@ const passphrase = "password"                                         // used wh
 const path = "../../hippod/main.go"
 
 func getAliceAddress() (string, error) {
-	cmd := exec.Command("bash", "-c", `echo -e "password" | go run hippod/main.go keys show alice --keyring-backend file | awk '/address:/ {print $3}'`)
+	cmd := exec.Command("bash", "-c", `echo -e "password" | go run ../../hippod/main.go keys show alice --keyring-backend file | awk '/address:/ {print $3}'`)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		return "", err
@@ -49,6 +49,7 @@ func TestAuth(t *testing.T) {
 
 func TestBank(t *testing.T) {
 	delegator_address, _ := getAliceAddress()
+	fmt.Print(delegator_address)
 	tests := []Test{
 		{command: []string{"query", "bank", "balances", delegator_address}, expect: "balances", errorMsg: "balances should be in the output"},
 		// {command: []string{"query", "bank", "denom-metadata", "ahp"}, expect: "ahp", errorMsg: "metadata should be in the output"}, // Fail, currently metadata do not exists
