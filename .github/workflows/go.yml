@@ -35,7 +35,8 @@ jobs:
 
       - name: Test
         run: |
-          go test -coverpkg=./... ./... -v $(go list ./... | grep -v "/test/e2e") && go test ./... $(go list ./... | grep -v "/test/e2e") -coverprofile=cover.out && go tool cover -func=cover.out
+          path_to_test=$(go list ./... | grep -v "/test/e2e")
+          go test -coverpkg=path_to_test path_to_test -v  && go test path_to_test -coverprofile=cover.out && go tool cover -func=cover.out
 
           coverage=$(go tool cover -func=cover.out | awk '/total:/ {print $3}' | sed 's/%//' | awk '{print $1}')
           threshold=80
@@ -53,7 +54,7 @@ jobs:
           echo "Coverage is $coverage%, which meets the threshold ($threshold%)"
           fi
 
-  genesis-test:
+  e2e-genesis-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
