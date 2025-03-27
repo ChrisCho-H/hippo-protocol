@@ -35,8 +35,8 @@ jobs:
 
       - name: Test
         run: |
-          go test -coverpkg=$(go list ./... | grep -v "/test/e2d") $(go list ./... | grep -v "/test/e2d") -v
-          go test $(go list ./... | grep -v "/test/e2d") -coverprofile=cover.out
+          go test -coverpkg=$(go list ./... | grep -v "/test/e2e") $(go list ./... | grep -v "/test/e2e") -v
+          go test $(go list ./... | grep -v "/test/e2e") -coverprofile=cover.out
           go tool cover -func=cover.out
 
           coverage=$(go tool cover -func=cover.out | awk '/total:/ {print $3}' | sed 's/%//' | awk '{print $1}')
