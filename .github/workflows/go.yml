@@ -38,6 +38,7 @@ jobs:
           go test -coverpkg=$(go list ./... | grep -v "/test/e2e") $(go list ./... | grep -v "/test/e2e") -v
           go test $(go list ./... | grep -v "/test/e2e") -coverprofile=cover.out
           go tool cover -func=cover.out
+
           coverage=$(go tool cover -func=cover.out | awk '/total:/ {print $3}' | sed 's/%//' | awk '{print $1}')
           threshold=80
 
@@ -73,11 +74,12 @@ jobs:
           go run hippod/main.go genesis collect-gentxs
           go run hippod/main.go start &
 
-      - name: Run Command Test
+      - name: Run Command Test # Ensure all the commands pass.
         run: |
+          set -e
           go test ./test/e2e -v
 
       - name: Cleanup - Stop Node
-        if: always() # Ensure cleanup runs even if tests fail
+        if: always() # Ensure cleanup runs even if tests fail.
         run: |
           pkill -f "go run hippod/main.go start"
