@@ -49,6 +49,7 @@ jobs:
 
           if (( $(echo "$coverage" ) < $threshold )); then
           echo "Error:Coverage is below threshold ($coverage% < $threshold%)"
+          exit 1
 
           else
           echo "Coverage is $coverage%, which meets the threshold ($threshold%)"
@@ -81,4 +82,3 @@ jobs:
         if: always() # Ensure cleanup runs even if tests fail
         run: |
           pkill -f "go run hippod/main.go start"
-
