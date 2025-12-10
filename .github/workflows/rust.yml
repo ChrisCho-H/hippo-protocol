@@ -46,7 +46,7 @@ jobs:
       # Run 'cargo fmt --check' to ensure the code adheres to style guidelines.
       # This step will fail the workflow if any files need formatting.
       - name: Check Code Formatting (cargo fmt --check)
-        run: cargo fmt -- --check
+        run: cd sdk/core && cargo fmt -- --check
 
       # 5. Standard Cargo Tests
       - name: Run Cargo Tests
